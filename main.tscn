@@ -1,6 +1,7 @@
-[gd_scene load_steps=19 format=3 uid="uid://dmc8rxfdw5bf4"]
+[gd_scene load_steps=26 format=3 uid="uid://dmc8rxfdw5bf4"]
 
 [ext_resource type="Texture2D" uid="uid://4f28flxcaxus" path="res://sunset.exr" id="1_6o6w8"]
+[ext_resource type="Script" path="res://Main.cs" id="1_25c0e"]
 [ext_resource type="Script" path="res://Player.cs" id="1_uny3r"]
 [ext_resource type="Texture2D" uid="uid://blyl1cisgo3m" path="res://grid.jpg" id="2_cwtb0"]
 
@@ -44,7 +45,26 @@ albedo_texture = ExtResource("2_cwtb0")
 [sub_resource type="BoxShape3D" id="BoxShape3D_35du3"]
 size = Vector3(20, 1, 1)
 
+[sub_resource type="BoxMesh" id="BoxMesh_v1bsp"]
+size = Vector3(0.1, 5, 0.1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bhhhw"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iayu8"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_bhhhw")
+uv1_scale = Vector3(-1, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_8uhkk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k7d4a"]
+size = Vector3(2, 2, 0.5)
+
+[sub_resource type="QuadMesh" id="QuadMesh_t5217"]
+
 [node name="Node3D" type="Node3D"]
+script = ExtResource("1_25c0e")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_trjya")
@@ -158,3 +178,30 @@ shape = SubResource("BoxShape3D_ff23e")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Cube5"]
 material_override = SubResource("StandardMaterial3D_l63kg")
 mesh = SubResource("BoxMesh_iiapx")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size_2d_override = Vector2i(-512, 512)
+size_2d_override_stretch = true
+
+[node name="SingleCamera" type="Camera3D" parent="SubViewport"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewport/SingleCamera"]
+mesh = SubResource("BoxMesh_v1bsp")
+skeleton = NodePath("../..")
+
+[node name="Mirror" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4)
+
+[node name="MirrorMesh" type="MeshInstance3D" parent="Mirror"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_iayu8")
+mesh = SubResource("QuadMesh_8uhkk")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mirror"]
+shape = SubResource("BoxShape3D_k7d4a")
+
+[node name="MirrorBack" type="MeshInstance3D" parent="Mirror"]
+transform = Transform3D(-2, 0, -1.74846e-07, 0, 2, 0, 1.74846e-07, 0, -2, 0, 0, 0)
+visible = false
+mesh = SubResource("QuadMesh_t5217")
