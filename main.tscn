@@ -45,9 +45,6 @@ albedo_texture = ExtResource("2_cwtb0")
 [sub_resource type="BoxShape3D" id="BoxShape3D_35du3"]
 size = Vector3(20, 1, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_v1bsp"]
-size = Vector3(0.1, 5, 0.1)
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_bhhhw"]
 viewport_path = NodePath("SubViewport")
 
@@ -62,6 +59,9 @@ uv1_scale = Vector3(-1, 1, 1)
 size = Vector3(2, 2, 0.5)
 
 [sub_resource type="QuadMesh" id="QuadMesh_t5217"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v1bsp"]
+size = Vector3(0.1, 5, 0.1)
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_25c0e")
@@ -179,16 +179,6 @@ shape = SubResource("BoxShape3D_ff23e")
 material_override = SubResource("StandardMaterial3D_l63kg")
 mesh = SubResource("BoxMesh_iiapx")
 
-[node name="SubViewport" type="SubViewport" parent="."]
-size_2d_override = Vector2i(-512, 512)
-size_2d_override_stretch = true
-
-[node name="SingleCamera" type="Camera3D" parent="SubViewport"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewport/SingleCamera"]
-mesh = SubResource("BoxMesh_v1bsp")
-skeleton = NodePath("../..")
-
 [node name="Mirror" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4)
 
@@ -205,3 +195,14 @@ shape = SubResource("BoxShape3D_k7d4a")
 transform = Transform3D(-2, 0, -1.74846e-07, 0, 2, 0, 1.74846e-07, 0, -2, 0, 0, 0)
 visible = false
 mesh = SubResource("QuadMesh_t5217")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size_2d_override = Vector2i(-512, 512)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="SingleCamera" type="Camera3D" parent="SubViewport"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewport/SingleCamera"]
+mesh = SubResource("BoxMesh_v1bsp")
+skeleton = NodePath("../..")
